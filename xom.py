@@ -114,7 +114,7 @@ class XUnitOut(SuiteVisitor):
         """Writes testcase element"""
         attrs = {'classname': test.parent.longname,
                  'name': test.name,
-                 'time': self._time_as_seconds(test.elapsedtime),
+                 'time': time_as_seconds(test.elapsedtime),
                  # * Define Custom test attributes here:
                  # * 'file': test.source,
                  # * 'lineno': str(test.lineno),
