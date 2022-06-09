@@ -6,7 +6,7 @@ https://github.com/robotframework/robotframework/blob/master/src/robot/reporting
 
 ## Simple Installation
 Clone this repository or just download the `xom.py` file.
-Place the `xom.py` file to your `PYTHONPATH` or use `--pythonpath` specifier for Robot Framework test run. See examples below. Examples assumes `xom.py` is located to very same folder than `.robot` files.
+Place the `xom.py` file to your `PYTHONPATH` or use `--pythonpath` specifier for Robot Framework test run. See examples below. Examples assume `xom.py` is located to very same folder than `.robot` files.
 
 ## Example Usage
 
@@ -80,11 +80,18 @@ def start_suite(self, suite):
     self._writer.start('testsuite', attrs)
 ```
 
-### Testcase Attribute `file`
-as testcase's source filename.
-
-### Testcase attribute `lineno`
-as line number of testcase in the source file.
+### Testcase Attribute `file` And `lineno`
+Testcase attributes `file` as testcase's source filename and `lineno` as line number of testcase in the source file.
+```
+def visit_test(self, test):
+    attrs = {'classname': test.parent.longname,
+                'name': test.name,
+                'time': time_as_seconds(test.elapsedtime),
+                'file': test.source,
+                'lineno': str(test.lineno),
+                }
+    self._writer.start('testcase', attrs)
+```
 
 ### Method `_starttime_to_isoformat` to custom timestamp.
 Alternate XUnit output's timestamps to your favor.
