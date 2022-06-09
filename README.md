@@ -4,6 +4,10 @@ Simple implementation for Robot Framework XUnit output modifier.
 This work is derived from Robot Framework's XUnitFileWriter:
 https://github.com/robotframework/robotframework/blob/master/src/robot/reporting/xunitwriter.py
 
+## Simple Installation
+Clone this repository or just download the `xom.py` file.
+Place the `xom.py` file to your `PYTHONPATH` or use `--pythonpath` specifier for Robot Framework test run. See examples below. Examples assumes `xom.py` is located to very same folder than `.robot` files.
+
 ## Example Usage
 
 --prerebotmodifier [module_name].[class_name]:[output_filename]
@@ -58,6 +62,23 @@ Root node could have plural form `<testsuites>`. You may modify `<testsuites>` r
 See also [JUnit team's xsd reference.](https://github.com/junit-team/junit5/blob/main/platform-tests/src/test/resources/jenkins-junit.xsd)
 
 ### Testsuite Attribute `hostname`
+To get `hostname` within testsuite element you may use following reference implementation:
+```
+import platform
+
+def start_suite(self, suite):
+    attrs = {'name':       suite.name,
+            'tests':       str(suite.statistics.total),
+            # No meaningful data available from suite for `errors`.
+            'errors':      '0',
+            'failures':    str(suite.statistics.failed),
+            'skipped':     str(suite.statistics.skipped),
+            'time':        time_as_seconds(suite.elapsedtime),
+            'timestamp':   self._starttime_to_isoformat(suite.starttime),
+            'hostname':    platform.node(),
+            }
+    self._writer.start('testsuite', attrs)
+```
 
 ### Testcase Attribute `file`
 as testcase's source filename.
