@@ -96,6 +96,38 @@ def visit_test(self, test):
 ### Method `_starttime_to_isoformat` to custom timestamp.
 Alternate XUnit output's timestamps to your favor.
 
+## Full-Blown Example Output
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Test &amp; Test2" tests="4" errors="0" failures="1" skipped="1" time="0.037" timestamp="2022-06-09T17:57:05000" hostname="osstest-desktop-1">
+    <testsuite name="Test" tests="3" errors="0" failures="1" skipped="1" time="0.013" timestamp="2022-06-09T17:57:05000" hostname="osstest-desktop-1">
+        <testcase classname="Test &amp; Test2.Test" name="Metadata Test" time="0.003" file="/home/osstest/demo/test.robot" lineno="2">
+        </testcase>
+        <testcase classname="Test &amp; Test2.Test" name="Test Failing" time="0.004" file="/home/osstest/demo/test.robot" lineno="8">
+            <failure message="This is failing case." type="AssertionError"/>
+        </testcase>
+        <testcase classname="Test &amp; Test2.Test" name="Test Skip" time="0.002" file="/home/osstest/demo/test.robot" lineno="12">
+            <skipped message="This is skipped case." type="SkipExecution"/>
+        </testcase>
+        <properties>
+            <property name="metaname" value="metavalue"/>
+            <property name="metaname2" value="metavalue2"/>
+            <property name="utc-offset" value="-10800"/>
+        </properties>
+    </testsuite>
+    <testsuite name="Test2" tests="1" errors="0" failures="0" skipped="0" time="0.004" timestamp="2022-06-09T17:57:05000" hostname="osstest-desktop-1">
+        <testcase classname="Test &amp; Test2.Test2" name="Just One Thing To Test" time="0.002" file="/home/osstest/demo/test2.robot" lineno="2">
+        </testcase>
+        <properties>
+            <property name="utc-offset" value="-10800"/>
+        </properties>
+    </testsuite>
+    <properties>
+        <property name="utc-offset" value="-10800"/>
+    </properties>
+</testsuites>
+```
+
 ## References
 Robot Framework's prerebotmodifier:
 https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#toc-entry-498
