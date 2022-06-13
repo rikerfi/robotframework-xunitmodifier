@@ -19,19 +19,25 @@ Place the `xom.py` file to your `PYTHONPATH` or use `--pythonpath` specifier for
 ## Example Usage
 Naturally using `xom` requires [Robot Framework installed](https://github.com/robotframework/robotframework#installation). 
 
+General usage with `robot` or `rebot`:
+
 --prerebotmodifier [module_name].[class_name]:[output_filename]
 
 Get `xunit.xml` output file from the modifier:
-```shell session
+```bash
 robot --pythonpath . --prerebotmodifier xom.XUnitOut:xunit.xml test.robot
+```
+Same with `rebot`:
+```bash
+rebot --pythonpath . --prerebotmodifier xom.XUnitOut:xunit.xml output.xml
 ```
 
 **NOTE**: Do not use same filename for the modifier and Robot Framework's XUnit output. That won't work, because Robot Framework's XUnitWriter (specified with -x) overwrites the target file:
-```shell session
+```bash
 robot --pythonpath . --prerebotmodifier xom.XUnitOut:xunit.xml -x xunit.xml test.robot
 ```
 This works fine:
-```shell session
+```bash
 robot --pythonpath . --prerebotmodifier xom.XUnitOut:xcustom.xml -x xdefault.xml test.robot
 ```
 
