@@ -1,4 +1,4 @@
-# Robot Framework's XUnit Modifier
+# Robot Framework's XUnit Output Modifier (xom)
 Simple implementation for Robot Framework XUnit output modifier. The modifier implementation produces identical XUnit output file as Robot Framework's XUnit output does, but the modifier `xom.py` is much easier to custom various needs of XUnit output. Several requests discussed on Robot Framework community are pinpointed to the code allowing fast forward implementation like:
 
 - Plural root node `<testsuites>` when multiple testsuites in a test run.
@@ -17,6 +17,7 @@ Clone this repository or just download the `xom.py` file.
 Place the `xom.py` file to your `PYTHONPATH` or use `--pythonpath` specifier for Robot Framework test run. See examples below. Examples assume `xom.py` is located to very same folder than `.robot` files.
 
 ## Example Usage
+Naturally using `xom` requires [Robot Framework installed](https://github.com/robotframework/robotframework#installation). 
 
 --prerebotmodifier [module_name].[class_name]:[output_filename]
 
