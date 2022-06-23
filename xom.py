@@ -84,7 +84,7 @@ class XUnitOut(SuiteVisitor):
                  'time':        self._time_as_seconds(suite.elapsedtime),
                  'timestamp':   self._starttime_to_isoformat(suite.starttime),
                  # * Define custom suite attributes here:
-                 # * 'hostname': platform.node(),
+                 # * 'hostname': platform.uname().node,
                  }
         if ROOT_NODE_PLURAL and suite.parent is None and suite.suites:
             # * Define custom attributes for <testsuites> element here:
@@ -129,7 +129,7 @@ class XUnitOut(SuiteVisitor):
                  'time': self._time_as_seconds(test.elapsedtime),
                  # * Define Custom test attributes here:
                  # * 'file': test.source,
-                 # * 'lineno': str(test.lineno),
+                 # * 'lineno': f'{test.lineno}',
                  }
         self._writer.start('testcase', attrs)
         if test.failed:

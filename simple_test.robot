@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation  Demonstrate XUnit outout modifier.
+Documentation  Demonstrate XUnit output modifier.
 
 
 *** Test Cases ***

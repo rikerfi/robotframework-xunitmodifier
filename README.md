@@ -12,6 +12,11 @@ Simple implementation for Robot Framework XUnit output modifier. The modifier im
 This work is derived from Robot Framework's XUnitFileWriter:
 https://github.com/robotframework/robotframework/blob/master/src/robot/reporting/xunitwriter.py
 
+Eventually, some modification work introduced here could be promoted to Robot Framework itself.
+
+## Contribution
+All contributions are the most welcome. Feel free to file a bug report or enhancement request. Improve code with PRs, create tests or make the documentation more fluent.
+
 ## Simple Installation
 Clone this repository or just download the `xom.py` file.
 Place the `xom.py` file to your `PYTHONPATH` or use `--pythonpath` specifier for Robot Framework test run. See examples below. Examples assume `xom.py` is located to very same folder than `.robot` files.
@@ -64,12 +69,13 @@ Configuration flags are set to `False` by default.
 Root node could have plural form `<testsuites>`. You may modify `<testsuites>` root element's attributes:
 ```python
     if ROOT_NODE_PLURAL and suite.parent is None and suite.suites:
+        stats = suite.statistics  # Accessing property only once.
         attrs = {
             'name': suite.name,
-            'time': time_as_seconds(suite.elapsedtime),
-            'tests': str(suite.statistics.total),
-            'failures': str(suite.statistics.failed),
-            'disabled': str(suite.statistics.skipped), # If you feel that skipped tests maps to disabled.
+            'time': self._time_as_seconds(suite.elapsedtime),
+            'tests': f'{stats.total}',
+            'failures': f'{stats.failed}',
+            'disabled': f'{stats.skipped}', # If you feel that skipped tests maps to disabled.
             'errors': '0'
         }
         self._writer.start('testsuites', attrs)
@@ -82,15 +88,16 @@ To get `hostname` within testsuite element you may use following reference imple
 import platform
 
 def start_suite(self, suite):
+    stats = suite.statistics  # Accessing property only once.
     attrs = {'name':       suite.name,
-            'tests':       str(suite.statistics.total),
+            'tests':       f'{stats.total}',
             # No meaningful data available from suite for `errors`.
             'errors':      '0',
-            'failures':    str(suite.statistics.failed),
-            'skipped':     str(suite.statistics.skipped),
-            'time':        time_as_seconds(suite.elapsedtime),
+            'failures':    f'{stats.failed}',
+            'skipped':     f'{stats.skipped}',
+            'time':        self._time_as_seconds(suite.elapsedtime),
             'timestamp':   self._starttime_to_isoformat(suite.starttime),
-            'hostname':    platform.node(),
+            'hostname':    platform.uname().node,
             }
     self._writer.start('testsuite', attrs)
 ```
@@ -101,9 +108,9 @@ Testcase attributes `file` as testcase's source filename and `lineno` as line nu
 def visit_test(self, test):
     attrs = {'classname': test.parent.longname,
                 'name': test.name,
-                'time': time_as_seconds(test.elapsedtime),
+                'time': self._time_as_seconds(test.elapsedtime),
                 'file': test.source,
-                'lineno': str(test.lineno),
+                'lineno': f'{test.lineno}',
                 }
     self._writer.start('testcase', attrs)
 ```
