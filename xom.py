@@ -74,13 +74,14 @@ class XUnitOut(SuiteVisitor):
 
     def start_suite(self, suite):
         """When suite is started writes testsuite/testsuites element's start tag and attributes."""
+        stats = suite.statistics  # Accessing property only once.
         attrs = {'name':        suite.name,
-                 'tests':       str(suite.statistics.total),
+                 'tests':       f'{stats.total}',
                  # No meaningful data available from suite for `errors`.
                  'errors':      '0',
-                 'failures':    str(suite.statistics.failed),
-                 'skipped':     str(suite.statistics.skipped),
-                 'time':        time_as_seconds(suite.elapsedtime),
+                 'failures':    f'{stats.failed}',
+                 'skipped':     f'{stats.skipped}',
+                 'time':        self._time_as_seconds(suite.elapsedtime),
                  'timestamp':   self._starttime_to_isoformat(suite.starttime),
                  # * Define custom suite attributes here:
                  # * 'hostname': platform.node(),
@@ -125,7 +126,7 @@ class XUnitOut(SuiteVisitor):
         """Writes testcase element"""
         attrs = {'classname': test.parent.longname,
                  'name': test.name,
-                 'time': time_as_seconds(test.elapsedtime),
+                 'time': self._time_as_seconds(test.elapsedtime),
                  # * Define Custom test attributes here:
                  # * 'file': test.source,
                  # * 'lineno': str(test.lineno),
@@ -138,6 +139,10 @@ class XUnitOut(SuiteVisitor):
             self._writer.element('skipped', attrs={'message': test.message,
                                                    'type': 'SkipExecution'})
         self._writer.end('testcase')
+
+    def _time_as_seconds(self, millis):
+        """Convert milliseconds to seconds"""
+        return f'{millis / 1000:.3f}'
 
     def _starttime_to_isoformat(self, stime):
         """RF start time have precision .XYZ seconds, while JUnit have timestamps .XYZabc seconds.
@@ -152,8 +157,3 @@ class XUnitOut(SuiteVisitor):
             utc = timestamp_to_secs(stime) + offset
             stime = secs_to_timestamp(utc)
         return f'{stime[:4]}-{stime[4:6]}-{stime[6:8]}T{stime[9:]}{padding}'
-
-
-def time_as_seconds(millis):
-    """Convert milliseconds to seconds"""
-    return f'{millis / 1000:.3f}'
